@@ -1,0 +1,13 @@
+require 'csv'
+require 'date'
+require 'money'
+
+require_relative 'cash.rb'
+require_relative 'movie_collection.rb'
+require_relative 'movie.rb'
+require_relative 'netflix.rb'
+require_relative 'theatre.rb'
+require_relative 'ancient_movie.rb'
+require_relative 'classic_movie.rb'
+require_relative 'modern_movie.rb'
+require_relative 'new_movie.rb'
