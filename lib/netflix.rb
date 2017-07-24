@@ -21,14 +21,23 @@ module MovieViewer
       @showing_film = hashes.inject(@movies) do |films, hash|
         if block_given?
           films.select { |film| yield(film) }
-        elsif !hash.select { |k, _v| @movies.sample.respond_to?(k) }.empty?
+        elsif in_default_filters(hash)
           filter_by(hash)
         else
-          hash.inject(films) { |_movies, (k, v)| films.select { |film| @filter[k].call(film, v) } }
+          filter_by_personal_filters(hash, films)
+
         end
       end
 
       @showing_film = @showing_film.is_a?(Array) ? @showing_film.sort_by { |film| film.score.to_f * rand }.last : @showing_film
+    end
+
+    def in_default_filters(hash)
+      !hash.select { |k, _v| @movies.sample.respond_to?(k) }.empty?
+    end
+
+    def filter_by_personal_filters(hash, films)
+      hash.inject(films) { |_movies, (k, v)| films.select { |film| @filter[k].call(film, v) } }
     end
 
     def withdraw
@@ -36,8 +45,8 @@ module MovieViewer
       @balance -= Money.new(@showing_film.price * 100, 'USD')
     end
 
-    def show(*hashes)
-      select_film(*hashes)
+    def show(*hashes, &block)
+      select_film(*hashes, &block)
       withdraw
       puts "Now showing #{@showing_film} start time #{Time.now.strftime('%H:%M')}, end time #{(Time.now + @showing_film.duration.to_i * 60).strftime('%H:%M')}"
     end

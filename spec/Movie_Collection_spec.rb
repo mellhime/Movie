@@ -56,12 +56,6 @@ RSpec.describe MovieCollection do
       let (:field) { :compositor }
       it { expect { subject }.to raise_error(NoMethodError) }
     end
-
-    context 'check the matcher' do
-      it 'should raise clear error' do
-        expect { expect(new_collection.sort_by(:year)).to be_sorted_by(:director) }.to raise_error('expected to be sorted by year but sorted by smth else')
-      end
-    end
   end
 
   describe '#filter_by' do # может выдавать список фильмов по переданным фильтрам
